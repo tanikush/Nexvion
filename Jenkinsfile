@@ -31,7 +31,7 @@ pipeline {
         stage('Package') {
             steps {
                 echo 'Packaging application...'
-                bat 'tar -czf app-package.tar.gz . --exclude=.git'
+                bat 'tar --exclude=.git -czf app-package.tar.gz .'
             }
         }
 
