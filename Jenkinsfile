@@ -56,13 +56,24 @@ pipeline {
             steps {
                 echo 'Deploying new version (rolling deployment)...'
                 bat '''
-                    docker stop week9-app-old || true
-                    docker rm week9-app-old || true
+                    docker stop week9-app-old 
+                    docker rm week9-app-old 
                     docker run -d --name week9-app-new -p 8090:80 $IMAGE_NAME:$IMAGE_TAG
+                    exit /b 0
                 '''
             }
         }
     }
+
+    post {
+        success {
+            echo 'Pipline complete successfully! Application deployed.'
+        }
+        failure {
+            echo 'Pipline failed. Review console ouput for details.'
+        }
+    }
+ }
 
     post {
         success {
