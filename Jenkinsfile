@@ -17,14 +17,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                sh 'echo "Simulating build process..."'
+                bat 'echo "Simulating build process..."'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
-                sh 'echo "Running unit tests..." && echo "All tests passed"'
+                bat 'echo "Running unit tests..." && echo "All tests passed"'
             }
         }
 
@@ -38,7 +38,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                bat 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
             }
         }
 
@@ -46,8 +46,8 @@ pipeline {
             steps {
                 echo 'Pushing image to Docker Hub...'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
+                    bat 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    bat 'docker push $IMAGE_NAME:$IMAGE_TAG'
                 }
             }
         }
@@ -55,7 +55,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying new version (rolling deployment)...'
-                sh '''
+                bat '''
                     docker stop week9-app-old || true
                     docker rm week9-app-old || true
                     docker run -d --name week9-app-new -p 8090:80 $IMAGE_NAME:$IMAGE_TAG
