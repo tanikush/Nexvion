@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 bat 'docker rm -f week9-app-new'
-                bat docker run -d --name week9-app-new -p 8090:80 $IMAGE_NAME:$IMAGE_TAG
+                bat 'docker run -d --name week9-app-new -p 8090:80 $IMAGE_NAME:$IMAGE_TAG%'
             }
         }
     }
