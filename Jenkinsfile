@@ -21,7 +21,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'echo "Running unit tests..." && echo "All tests passed"'
+                bat 'exit 1'
             }
         }
 
