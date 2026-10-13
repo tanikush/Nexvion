@@ -33,7 +33,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t $IMAGE_NAME:$IMAGE_TAG% .'
+                bat 'docker build -t %IMAGE_NAME:%IMAGE_TAG% .'
             }
         }
 
@@ -41,8 +41,8 @@ pipeline {
             steps {
                 echo 'Pushing image to Docker Hub...'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    bat 'docker push $IMAGE_NAME:$IMAGE_TAG'
+                    bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+                    bat 'docker push %IMAGE_NAME:%IMAGE_TAG%'
                 }
             }
         }
@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 bat 'docker rm -f week9-app-new'
-                bat 'docker run -d --name week9-app-new -p 8090:80 $IMAGE_NAME:$IMAGE_TAG%'
+                bat 'docker run -d --name week9-app-new -p 8090:80 %IMAGE_NAME:%IMAGE_TAG%'
             }
         }
     }
